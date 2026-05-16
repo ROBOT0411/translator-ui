@@ -2,125 +2,78 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 品牌簡報翻譯神器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>承邦有限公司 - AI 簡報系統</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
-        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f3f4f6; }
-        .loader {
-            border-top-color: #2563eb;
-            animation: spinner 1.5s linear infinite;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f1f5f9; }
+        .loader { border-top-color: #1e293b; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
-
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden flex flex-col">
-        <div class="bg-blue-600 p-6 text-white text-center">
-            <h1 class="text-xl font-bold mb-1"><i class="fa-solid fa-file-powerpoint mr-2"></i>AI 品牌簡報翻譯機</h1>
-            <p class="text-blue-100 text-xs">自動翻譯繁中 + 完美替換公司 Logo</p>
+    <div class="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md overflow-hidden border">
+        <div class="bg-slate-900 p-8 text-white text-center">
+            <div class="bg-blue-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-building-shield text-3xl"></i></div>
+            <h1 class="text-2xl font-bold">承邦有限公司</h1>
+            <p class="text-slate-400 text-sm">AI 智慧品牌與轉檔系統</p>
         </div>
-
-        <div class="p-6 flex-grow flex flex-col gap-5">
-            
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">1. 選擇原始簡報 (.pptx)</label>
-                <input type="file" id="pptxInput" accept=".pptx" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-gray-300 rounded-lg p-1 bg-gray-50">
+        <div class="p-8 space-y-6">
+            <div class="space-y-4">
+                <input type="file" id="pptxInput" accept=".pptx" class="block w-full text-sm border-2 border-dashed rounded-2xl p-3 bg-slate-50">
+                <input type="file" id="logoInput" accept="image/*" class="block w-full text-sm border-2 border-dashed rounded-2xl p-3 bg-slate-50">
             </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">2. 選擇新公司 Logo (PNG/JPG，選填)</label>
-                <input type="file" id="logoInput" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100 border border-gray-300 rounded-lg p-1 bg-gray-50">
-                <p class="text-[11px] text-gray-400 mt-1">* 系統會自動將此 Logo 植入每頁簡報的右上角</p>
+            <div id="statusArea" class="hidden text-center"><div class="loader border-4 rounded-full w-10 h-10 mx-auto mb-2"></div><p class="text-sm font-bold">正在優化為承邦專屬內容...</p></div>
+            <div id="errorArea" class="hidden bg-red-50 text-red-700 p-4 rounded-xl text-xs"></div>
+            <button id="btnSubmit" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-lg">一鍵品牌轉檔</button>
+            <div id="successSection" class="hidden space-y-3">
+                <div class="bg-green-500 text-white p-3 rounded-2xl text-center font-bold">轉換成功！</div>
+                <button id="btnSave" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl">選擇儲存位置 / 分享檔案</button>
+                <button onclick="location.reload()" class="w-full text-slate-400 text-xs">處理下一個檔案</button>
             </div>
-
-            <div id="statusArea" class="hidden bg-blue-50 border border-blue-100 rounded-lg p-4 flex flex-col items-center justify-center text-center my-2">
-                <div class="loader border-4 border-gray-200 rounded-full w-10 h-10 mb-3"></div>
-                <p id="statusText" class="text-sm font-medium text-blue-800 animate-pulse">雲端 AI 正在翻譯並替換 Logo 中...</p>
-                <p class="text-[11px] text-gray-400 mt-1">免費伺服器啟動約需 1-2 分鐘，請勿關閉網頁</p>
-            </div>
-
-            <div id="errorArea" class="hidden bg-red-50 border border-red-100 text-red-700 text-xs rounded-lg p-3">
-                <i class="fa-solid fa-circle-exclamation mr-1"></i> <span id="errorText">發生錯誤</span>
-            </div>
-
-            <button id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-colors flex items-center justify-center">
-                <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> 開始雲端轉檔
-            </button>
-
-            <a id="btnDownload" class="hidden w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-colors flex items-center justify-center text-center">
-                <i class="fa-solid fa-download mr-2"></i> 下載翻譯完成的簡報
-            </a>
-
         </div>
     </div>
-
     <script>
-        // 您在 Render 部署成功的專屬雲端伺服器網址
         const SERVER_URL = "https://my-pptx-bot-lw8t.onrender.com/process-pptx";
+        let resultBlob = null, finalFileName = "";
 
         document.getElementById('btnSubmit').addEventListener('click', async () => {
             const pptxFile = document.getElementById('pptxInput').files[0];
             const logoFile = document.getElementById('logoInput').files[0];
-            
-            if (!pptxFile) {
-                alert('請至少選擇一個 PPTX 簡報檔案！');
-                return;
-            }
+            if (!pptxFile) return alert('請選檔案');
 
-            // UI 切換
-            document.getElementById('btnSubmit').style.display = 'none';
-            document.getElementById('btnDownload').style.display = 'none';
-            document.getElementById('errorArea').classList.add('hidden');
+            document.getElementById('btnSubmit').classList.add('hidden');
             document.getElementById('statusArea').classList.remove('hidden');
 
-            // 打包資料
             const formData = new FormData();
             formData.append('pptx', pptxFile);
-            if (logoFile) {
-                formData.append('logo', logoFile);
-            }
+            if (logoFile) formData.append('logo', logoFile);
 
             try {
-                // 發送給您的 Render 雲端伺服器
-                const response = await fetch(SERVER_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (!response.ok) {
-                    const errData = await response.json();
-                    throw new Error(errData.error || `伺服器回應錯誤: ${response.status}`);
-                }
-
-                // 接收回傳的二進位檔案流 (Blob)
-                const blob = await response.blob();
-                const downloadUrl = window.URL.createObjectURL(blob);
-                
-                // 設定下載按鈕
-                const btnDownload = document.getElementById('btnDownload');
-                btnDownload.href = downloadUrl;
-                btnDownload.download = `完成翻譯_${pptxFile.name}`;
-                
-                // 顯示下載按鈕
+                const response = await fetch(SERVER_URL, { method: 'POST', body: formData });
+                resultBlob = await response.blob();
+                finalFileName = `承邦轉檔_${pptxFile.name}`;
                 document.getElementById('statusArea').classList.add('hidden');
-                btnDownload.classList.remove('hidden');
-                document.getElementById('btnSubmit').style.display = 'flex';
-                document.getElementById('btnSubmit').innerText = '再次轉檔其他檔案';
-
-            } catch (error) {
-                console.error(error);
-                document.getElementById('statusArea').classList.add('hidden');
-                document.getElementById('btnSubmit').style.display = 'flex';
-                
-                const errorArea = document.getElementById('errorArea');
-                errorArea.classList.remove('hidden');
-                document.getElementById('errorText').innerText = error.message;
+                document.getElementById('successSection').classList.remove('hidden');
+            } catch (e) {
+                alert('伺服器睡眠中，請等一分鐘後再試');
+                location.reload();
             }
         });
+
+        document.getElementById('btnSave').addEventListener('click', async () => {
+            if (!resultBlob) return;
+            const file = new File([resultBlob], finalFileName, { type: resultBlob.type });
+            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                try { await navigator.share({ files: [file], title: '承邦簡報' }); } catch (e) { standardDownload(); }
+            } else { standardDownload(); }
+        });
+
+        function standardDownload() {
+            const a = document.createElement('a'); a.href = window.URL.createObjectURL(resultBlob); a.download = finalFileName; a.click();
+        }
     </script>
 </body>
 </html>
